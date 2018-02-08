@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <button @click="fn()">regester</button>
+        <button @click="load()">load</button>
+        <demo id="floor" title="登录" content="内容" v-show="msg==1" @close="close">
+            <h1 slot="n1">我是可替换的内容</h1>
+            <h2 slot="n2">我是可替换的内容</h2>
+        </demo>
+        <demo title="注册" conent="内容" v-show="msg==2" @close="close">
+                <h1 slot="n1">我是可替换的内容</h1>
+                <h2 slot="n2">我是可替换的内容</h2>
+        </demo>
+    </div>
+    <script src="vue.js"></script>
+    <!-- 子组件 -->
+    <script type="text/x-template" id="regest">
+      <div id="content" style="width:600px;height:400px;background:#0f0;">
+             <h1>{{title}}</h1>
+             <!-- 子组件中绑事件不好使，因其要访问父组件，所以要在子组件绑事件时用$emit('close')方法，
+            其close随意取，在父组件中绑定，@close（随意取）方法。 -->
+             <span @click="$emit('close',title)" style="float:right;width:20px;height:20px;border-radius:50%;background:#f00;text-align:center">x</span>
+             用户名： <input type="text">
+             密码：<input type="password">
+          <slot name="n1">
+              <p>{{content}}</p>
+          </slot>
+          <slot name="n2">
+               <p id="first">{{content}}</p>
+          </slot>
+          
+
+     </div>
+    
+    
+    
+    </script>
+    <script>
+         var vm=new Vue({
+        el:"#app",
+        data:{
+            msg:""
+        },
+        methods:{
+            fn:function(){
+                this.msg=2;
+            },
+            load:function(){
+                this.msg=1;
+            },
+           close:function(val){
+                this.msg="";
+               alert(val+"关闭");
+           }
+      
+
+        },
+        components:{
+            // demo是父组件
+            demo:{
+                // template子组件
+                template:"#regest",
+                props:['title','content']
+                
+            }
+        }
+    });
+    </script>
+   
+</body>
+</html>
